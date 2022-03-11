@@ -1,8 +1,5 @@
 package fr.lernejo.guessgame;
 
-
-
-import fr.lernejo.logger.ConsoleLogger;
 import fr.lernejo.logger.Logger;
 import fr.lernejo.logger.LoggerFactory;
 
@@ -11,24 +8,31 @@ import java.util.Scanner;
 public class HumanPlayer implements Player {
 
     Scanner scanner = new Scanner(System.in);
+    Logger logger = LoggerFactory.getLogger("HumanPlayer");
 
     @Override
     public long askNextGuess() {
-        long input = scanner.nextLong();
-        return input;
+        logger.log("You guess: ");
+        do {
+            try {
+                String inputStr = scanner.nextLine();
+                return Long.parseLong(inputStr);
+            } catch (NumberFormatException e){
+                logger.log("Not a number, try again");
+            }
+        } while(true);
     }
 
     @Override
     public void respond(boolean lowerOrGreater) {
-
-        Logger logger = LoggerFactory.getLogger("respond");
+        String hint;
 
         if (!lowerOrGreater) {
-            logger.log("plus petit");
+            hint = "lower";
         } else {
-            logger.log("plus grand");
+            hint = "greater";
         }
-
+        logger.log("Hint: "+hint);
     }
 
 }

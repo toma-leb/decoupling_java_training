@@ -3,7 +3,8 @@ package fr.lernejo.guessgame;
 import fr.lernejo.logger.Logger;
 import fr.lernejo.logger.LoggerFactory;
 
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class Simulation {
@@ -12,13 +13,13 @@ public class Simulation {
     private final Player player;
     private long numberToGuess;
 
-    public Simulation(Player player) {
+    public Simulation(Player player, long numberToGuess) {
         this.player = player;
+        this.numberToGuess = numberToGuess;
     }
 
     public void initialize(long numberToGuess) {
-        this.numberToGuess = numberToGuess;
-        this.loopUntilPlayerSucceed();
+        this.numberToGuess =numberToGuess;
     }
 
     /**
@@ -41,10 +42,25 @@ public class Simulation {
 
     public void loopUntilPlayerSucceed() {
 
+        initialize(numberToGuess);
+
         boolean status = false;
+        int round = 1;
+
+        long timeBegin = System.currentTimeMillis();
 
         while (!status) {
             status = this.nextRound();
+            round += 1;
         }
+        long timeEnd = System.currentTimeMillis();
+        long time = timeEnd - timeBegin;
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("mm:ss.SSS");
+        Date date = new Date(time);
+        String timeStr = simpleDateFormat.format(date);
+
+        this.logger.log("Time: "+ timeStr);
+        this.logger.log("Round: " + round);
     }
 }
